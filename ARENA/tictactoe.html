@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tic Tac Toe - ARENA</title>
+<style>
+body{font-family:Arial;margin:0;padding:0;background:linear-gradient(120deg,#f6d365,#fda085);}
+.container{max-width:500px;margin:50px auto;background: rgba(255,255,255,0.95);padding:30px;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.2);text-align:center;}
+#board{display:grid;grid-template-columns:repeat(3,100px);grid-gap:10px;justify-content:center;margin-top:20px;}
+.cell{width:100px;height:100px;font-size:50px;display:flex;align-items:center;justify-content:center;background:#fefefe;border-radius:15px;cursor:pointer;transition:0.3s;}
+.cell:hover{background:#fce38a;transform:scale(1.1);}
+button{margin-top:20px;padding:10px 20px;border-radius:10px;border:none;background:linear-gradient(45deg,#85FFBD,#FFFB7D);cursor:pointer;transition:0.3s;}
+button:hover{transform:scale(1.05);box-shadow:0 5px 15px rgba(0,0,0,0.3);}
+#result{margin-top:20px;font-weight:bold;font-size:20px;}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Tic Tac Toe</h2>
+<div id="board"></div>
+<div id="result"></div>
+<button onclick="resetBoard()">Reset</button>
+<br>
+<a href="games.html"><button>Back to Games</button></a>
+</div>
+
+<script>
+window.onload=function(){
+let board=["","","","","","","","",""];
+let currentPlayer="X";
+const boardDiv=document.getElementById("board");
+const resultDiv=document.getElementById("result");
+
+function drawBoard(){
+  boardDiv.innerHTML="";
+  board.forEach((cell,idx)=>{
+    const cellDiv=document.createElement("div");
+    cellDiv.classList.add("cell");
+    cellDiv.innerText=cell;
+    cellDiv.onclick=()=>makeMove(idx);
+    boardDiv.appendChild(cellDiv);
+  });
+}
+
+function makeMove(idx){
+  if(board[idx]!="" || resultDiv.innerText!="") return;
+  board[idx]=currentPlayer;
+  drawBoard();
+  if(checkWinner()){
+    resultDiv.innerText=currentPlayer+" Wins!";
+    saveScore("TicTacToe",currentPlayer+" win");
+    return;
+  }
+  if(board.every(c=>c!="")){
+    resultDiv.innerText="Draw!";
+    saveScore("TicTacToe","Draw");
+    return;
+  }
+  currentPlayer=currentPlayer==="X"?"O":"X";
+}
+
+function checkWinner(){
+  const combos=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  return combos.some(c=>c.every(i=>board[i]===currentPlayer));
+}
+
+function resetBoard(){
+  board=["","","","","","","","",""];
+  currentPlayer="X";
+  resultDiv.innerText="";
+  drawBoard();
+}
+
+function saveScore(game,score){
+  const user=JSON.parse(localStorage.getItem("user"))||{scores:{}};
+  if(!user.scores[game]) user.scores[game]=[];
+  user.scores[game].push(score);
+  localStorage.setItem("user",JSON.stringify(user));
+}
+
+window.resetBoard=resetBoard;
+window.saveScore=saveScore;
+drawBoard();
+};
+</script>
+</body>
+</html>

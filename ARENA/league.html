@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ARENA - League</title>
+<style>
+body{font-family:Arial;margin:0;padding:0;background:linear-gradient(120deg,#f6d365,#fda085);}
+.container{max-width:600px;margin:50px auto;background: rgba(255,255,255,0.95);padding:30px;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.2);}
+input,button{width:100%;padding:10px;margin:10px 0;border-radius:10px;border:1px solid #ccc;font-size:16px;}
+button{cursor:pointer;background:linear-gradient(45deg,#85FFBD,#FFFB7D);transition:0.3s;}
+button:hover{transform:scale(1.05);box-shadow:0 5px 15px rgba(0,0,0,0.3);}
+.league-card{background:#ffe6e6;margin:10px 0;padding:15px;border-radius:10px;}
+</style>
+</head>
+<body onload="displayLeagues()">
+<div class="container">
+<h2>League Management</h2>
+<input type="text" id="league" placeholder="League Name">
+<button onclick="createLeague()">Create League</button>
+<div id="leagues"></div>
+<a href="index.html"><button>Back to Home</button></a>
+</div>
+
+<script>
+function createLeague(){
+  const leagueName=document.getElementById("league").value.trim();
+  if(!leagueName){alert("Enter league name"); return;}
+  const user=JSON.parse(localStorage.getItem("user"))||{name:"Guest"};
+  const leagues=JSON.parse(localStorage.getItem("leagues")||"[]");
+  leagues.push({name:leagueName,owner:user.name,players:[]});
+  localStorage.setItem("leagues",JSON.stringify(leagues));
+  displayLeagues();
+}
+function displayLeagues(){
+  const leagues=JSON.parse(localStorage.getItem("leagues")||"[]");
+  const container=document.getElementById("leagues");
+  container.innerHTML=leagues.map((l,idx)=>
+    `<div class="league-card">
+      <p><strong>${l.name}</strong> (Owner: ${l.owner})</p>
+      <button onclick="joinLeague(${idx})">Join League</button>
+    </div>`).join("");
+}
+function joinLeague(idx){
+  const user=JSON.parse(localStorage.getItem("user"))||{name:"Guest"};
+  const leagues=JSON.parse(localStorage.getItem("leagues")||"[]");
+  const league=leagues[idx];
+  if(!league.players.includes(user.name)){league.players.push(user.name);leagues[idx]=league;localStorage.setItem("leagues",JSON.stringify(leagues));alert(`✅ Joined league: ${league.name}`);}
+  else{alert(`⚠ Already in league: ${league.name}`);}
+}
+</script>
+</body>
+</html>

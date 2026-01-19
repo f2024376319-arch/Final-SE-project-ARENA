@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dice Rolling - ARENA</title>
+<style>
+body{font-family:Arial;margin:0;padding:0;background:linear-gradient(120deg,#f6d365,#fda085);}
+.container{max-width:400px;margin:50px auto;background: rgba(255,255,255,0.95);padding:30px;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.2);text-align:center;}
+button{margin:10px;padding:10px 20px;border-radius:10px;border:none;background:linear-gradient(45deg,#85FFBD,#FFFB7D);cursor:pointer;transition:0.3s;}
+button:hover{transform:scale(1.05);box-shadow:0 5px 15px rgba(0,0,0,0.3);}
+#dice{font-size:50px;margin-top:20px;}
+#lastRolls{margin-top:20px;font-weight:bold;}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Dice Rolling</h2>
+<button onclick="rollDice()">Roll Dice 🎲</button>
+<div id="dice">🎲</div>
+<div id="lastRolls">Last 5 Rolls: </div>
+<br>
+<a href="games.html"><button>Back to Games</button></a>
+</div>
+
+<script>
+function rollDice(){
+  const roll=Math.floor(Math.random()*6)+1;
+  const diceDiv=document.getElementById("dice");
+  diceDiv.innerText="🎲 " + roll;
+  saveScore("Dice",roll);
+  updateLastRolls();
+}
+
+function saveScore(game,score){
+  const user=JSON.parse(localStorage.getItem("user"))||{scores:{}};
+  if(!user.scores[game]) user.scores[game]=[];
+  user.scores[game].push(score);
+  if(user.scores[game].length>5) user.scores[game].shift();
+  localStorage.setItem("user",JSON.stringify(user));
+}
+
+function updateLastRolls(){
+  const user=JSON.parse(localStorage.getItem("user"))||{scores:{}};
+  const rolls=user.scores["Dice"]||[];
+  document.getElementById("lastRolls").innerText="Last 5 Rolls: "+rolls.join(", ");
+}
+
+window.onload=updateLastRolls;
+</script>
+</body>
+</html>

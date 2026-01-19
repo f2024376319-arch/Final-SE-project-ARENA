@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Arena Scores</title>
+<style>
+body{font-family:Arial;margin:0;padding:0;background:linear-gradient(120deg,#f6d365,#fda085);}
+.container{max-width:600px;margin:50px auto;background:rgba(255,255,255,0.95);padding:30px;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.2);}
+h2{text-align:center;margin-bottom:20px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th,td{border:1px solid #ccc;padding:10px;text-align:center;}
+th{background:#85FFBD;}
+button{margin-top:20px;padding:10px 20px;border-radius:10px;border:none;background:linear-gradient(45deg,#85FFBD,#FFFB7D);cursor:pointer;transition:0.3s;}
+button:hover{transform:scale(1.05);box-shadow:0 5px 15px rgba(0,0,0,0.3);}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Your Game Scores</h2>
+<table id="scoreTable">
+<tr><th>Game</th><th>Scores</th></tr>
+</table>
+<a href="index.html"><button>Back to Home</button></a>
+</div>
+
+<script>
+function loadScores(){
+  const user=JSON.parse(localStorage.getItem("user"))||{scores:{}};
+  const table=document.getElementById("scoreTable");
+  for(const game in user.scores){
+    const tr=document.createElement("tr");
+    const tdGame=document.createElement("td"); tdGame.innerText=game;
+    const tdScores=document.createElement("td"); tdScores.innerText=user.scores[game].join(", ");
+    tr.appendChild(tdGame); tr.appendChild(tdScores);
+    table.appendChild(tr);
+  }
+}
+
+window.onload=loadScores;
+</script>
+</body>
+</html>

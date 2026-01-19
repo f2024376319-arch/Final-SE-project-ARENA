@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ARENA - Registration</title>
+<style>
+body{font-family:Arial;margin:0;padding:0;background:linear-gradient(120deg,#f6d365,#fda085);}
+.container{max-width:500px;margin:50px auto;background: rgba(255,255,255,0.95);padding:30px;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.2);}
+input,select,button{width:100%;padding:10px;margin:10px 0;border-radius:10px;border:1px solid #ccc;font-size:16px;}
+button{cursor:pointer;background:linear-gradient(45deg,#85FFBD,#FFFB7D);transition:0.3s;}
+button:hover{transform:scale(1.05);box-shadow:0 5px 15px rgba(0,0,0,0.3);}
+p{text-align:center;font-weight:bold;color:#333;}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Register</h2>
+<input type="text" id="name" placeholder="Username">
+<select id="role">
+<option>Player</option>
+<option>League Owner</option>
+<option>Advertiser</option>
+</select>
+<button onclick="register()">Register</button>
+<p id="msg"></p>
+<a href="index.html"><button>Back to Home</button></a>
+</div>
+
+<script>
+function register(){
+  const name=document.getElementById("name").value.trim();
+  const role=document.getElementById("role").value;
+  if(!name){document.getElementById("msg").innerText="⚠ Enter a username!"; return;}
+  const user={name,role,scores:{}};
+  localStorage.setItem("user",JSON.stringify(user));
+  document.getElementById("msg").innerText=`✅ Registered as ${role}`;
+}
+</script>
+</body>
+</html>

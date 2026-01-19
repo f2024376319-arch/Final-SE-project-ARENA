@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RPS - ARENA</title>
+<style>
+body{font-family:Arial;margin:0;padding:0;background:linear-gradient(120deg,#f6d365,#fda085);}
+.container{max-width:400px;margin:50px auto;background:rgba(255,255,255,0.95);padding:30px;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.2);text-align:center;}
+button{margin:5px;padding:10px 20px;border-radius:10px;border:none;background:linear-gradient(45deg,#85FFBD,#FFFB7D);cursor:pointer;transition:0.3s;font-size:16px;}
+button:hover{transform:scale(1.05);box-shadow:0 5px 15px rgba(0,0,0,0.3);}
+#result{margin-top:20px;font-weight:bold;}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Rock Paper Scissors</h2>
+<button onclick="play('Rock')">✊ Rock</button>
+<button onclick="play('Paper')">✋ Paper</button>
+<button onclick="play('Scissors')">✌ Scissors</button>
+<div id="result"></div>
+<br>
+<a href="games.html"><button>Back to Games</button></a>
+</div>
+
+<script>
+function play(choice){
+  const options=["Rock","Paper","Scissors"];
+  const comp=options[Math.floor(Math.random()*3)];
+  let res="";
+  if(choice===comp) res="Draw!";
+  else if((choice==="Rock" && comp==="Scissors")||(choice==="Paper" && comp==="Rock")||(choice==="Scissors" && comp==="Paper")) res="You Win!";
+  else res="You Lose!";
+  document.getElementById("result").innerText=`You: ${choice} | CPU: ${comp} → ${res}`;
+  saveScore("RPS",res);
+}
+
+function saveScore(game,score){
+  const user=JSON.parse(localStorage.getItem("user"))||{scores:{}};
+  if(!user.scores[game]) user.scores[game]=[];
+  user.scores[game].push(score);
+  localStorage.setItem("user",JSON.stringify(user));
+}
+</script>
+</body>
+</html>
